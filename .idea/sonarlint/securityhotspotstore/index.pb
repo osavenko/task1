@@ -82,3 +82,7 @@ A
 task04/.gitignore,8\c\8c63ddf2e53365487fe43d497b4f11496fb9298f
 C
 task04/CHANGELOG.md,d\b\dbf69302f1841832114a93ca39b77924d049249a
+Q
+!task04/deployment_resources.json1,8\5\8567c4bbcfa943182ed97ada58ef8145755cfb23
+R
+"task04/deployment_resources.json_1,2\4\2491d5217cee5dee1acc6a66dfc0c19a3640c64d

@@ -18,7 +18,11 @@ import java.util.List;
         isPublishVersion = false,
         logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED
 )
-@SqsTriggerEventSource(targetQueue = "async_queue", batchSize = 5)
+@SqsTriggerEventSource(
+        batchSize = 10,
+        targetQueue = "async_queue"
+)
+
 @DependsOn(
         name = "async_queue",
         resourceType = ResourceType.SQS_QUEUE

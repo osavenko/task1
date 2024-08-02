@@ -68,3 +68,17 @@ w
 G.idea/sonarlint/issuestore/7/6/7642374acbc1b1528229e1e1acd3e3af24fca9bc,5\8\58a8cbae268de5c3e824322483e0871fce5b6b8a
 A
 task03/.gitignore,5\a\5afa96570d40a632b90317992bfa066e659f24fb
+>
+task04/pom.xml,6\0\60d04216f50664624b2751ff7661d359d8c59120
+`
+0task04/jsrc/main/java/com/task04/SnsHandler.java,2\8\2896049f413a0f81a76d572d196712847e576998
+`
+0task04/jsrc/main/java/com/task04/SqsHandler.java,e\f\efbb743438b372288ade471b491d81c2e5b26013
+P
+ task04/deployment_resources.json,a\8\a84ae250f3418e250fcb34236d2d05dcedc2231d
+@
+task04/README.md,4\c\4cff8e4cf6cef0aa7ef62f361b9ca8fb544fd085
+A
+task04/.gitignore,8\c\8c63ddf2e53365487fe43d497b4f11496fb9298f
+C
+task04/CHANGELOG.md,d\b\dbf69302f1841832114a93ca39b77924d049249a

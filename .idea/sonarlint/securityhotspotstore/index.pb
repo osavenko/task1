@@ -82,7 +82,19 @@ A
 task04/.gitignore,8\c\8c63ddf2e53365487fe43d497b4f11496fb9298f
 C
 task04/CHANGELOG.md,d\b\dbf69302f1841832114a93ca39b77924d049249a
-Q
-!task04/deployment_resources.json1,8\5\8567c4bbcfa943182ed97ada58ef8145755cfb23
 R
 "task04/deployment_resources.json_1,2\4\2491d5217cee5dee1acc6a66dfc0c19a3640c64d
+\
+,task05/jsrc/main/java/com/task05/Task05.java,c\c\cc4f7c5d50bfc6bdd020c760324f8752b791a1e9
+P
+ task05/deployment_resources.json,4\1\417a00d3450baefd309341593f7e4cffb4547123
+A
+task05/.gitignore,f\9\f90cf160a0aaf9d98972753e29a51b3f1339852e
+>
+task05/pom.xml,7\5\75898c9158d3f6be30dc2aa9a1a19444b177a742
+[
++task05/jsrc/main/java/com/task05/Event.java,3\f\3fba4cc441a46dfb5d48e98f37d5343a40b168f0
+@
+task05/README.md,3\9\394526d21bd45e304e18e2ee2d2248fe012c5ffc
+C
+task05/CHANGELOG.md,0\8\0858b937693b22934a60f0194fe5b39449b9351a

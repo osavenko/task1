@@ -29,14 +29,14 @@ import java.util.UUID;
         logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED
 )
 @EnvironmentVariable(key = "TABLE_NAME", value = "${target_table}")
-public class Task05 implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
     private final AmazonDynamoDB dynamoDBClient;
     private final DynamoDB dynamoDB;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
     private static final String TABLE_NAME_ENV = System.getenv("TABLE_NAME");
 
-    public Task05() {
+    public ApiHandler() {
         dynamoDBClient = new AmazonDynamoDBClient();
         dynamoDBClient.setRegion(Region.getRegion(Regions.EU_CENTRAL_1));
         dynamoDB = new DynamoDB(dynamoDBClient);

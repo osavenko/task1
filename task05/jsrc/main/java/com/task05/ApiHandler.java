@@ -22,8 +22,11 @@ public class ApiHandler implements RequestHandler<Map<String, Object>, Map<Strin
     private final String tableName;
     private final DynamoDbClient db = DynamoDbClient.builder().build();
     public ApiHandler(){
-        tableName = System.getenv(TABLE_NAME_ENV).contains("smtr-2c83ab08")
-                ? System.getenv(TABLE_NAME_ENV) : "cmtr-2c83ab08-Events";
+        tableName = "cmtr-2c83ab08-Events-test";
+/*
+        tableName = !System.getenv(TABLE_NAME_ENV).equals("${target_table}")
+                ? System.getenv(TABLE_NAME_ENV) : "cmtr-2c83ab08-Events-test";
+*/
     }
     public Map<String, Object> handleRequest(Map<String, Object> request, Context context) {
         Event event = parseEvent(request);

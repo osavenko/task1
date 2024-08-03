@@ -9,6 +9,7 @@ import com.amazonaws.services.dynamodbv2.document.Item;
 import com.amazonaws.services.dynamodbv2.document.Table;
 import com.amazonaws.services.dynamodbv2.document.spec.PutItemSpec;
 import com.amazonaws.services.lambda.runtime.Context;
+import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
@@ -34,7 +35,7 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
     private final DynamoDB dynamoDB;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String TABLE_NAME_ENV = "cmtr-2c83ab08-Events-test";//System.getenv("TABLE_NAME");
+    private static final String TABLE_NAME_ENV = System.getenv("TABLE_NAME");
 
     public ApiHandler() {
         dynamoDBClient = new AmazonDynamoDBClient();
@@ -43,10 +44,16 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
     }
 
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent requestEvent, Context context) {
+        final LambdaLogger logger = context.getLogger();
+
+        logger.log(requestEvent.getPath());
+        logger.log(requestEvent.getHttpMethod());
+        logger.log(requestEvent.getBody());
         Event event = null;
         try {
             event = objectMapper.readValue(requestEvent.getBody(), Event.class);
         } catch (JsonProcessingException e) {
+            logger.log("Error objectMapper");
             e.printStackTrace();
         }
 
@@ -55,7 +62,8 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
                 .withNumber("principalId", event.getPrincipalId())
                 .withString("createdAt", Instant.now().toString())
                 .withMap("body", event.getBody());
-
+        logger.log("Current Item: "+item.toJSON());
+        logger.log("Current table name: "+TABLE_NAME_ENV);
         Table table = dynamoDB.getTable(TABLE_NAME_ENV);
         table.putItem(new PutItemSpec().withItem(item));
 

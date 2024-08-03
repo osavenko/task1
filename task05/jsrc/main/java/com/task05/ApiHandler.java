@@ -1,31 +1,15 @@
 package com.task05;
 
-import com.amazonaws.regions.Region;
-import com.amazonaws.regions.Regions;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDB;
-import com.amazonaws.services.dynamodbv2.AmazonDynamoDBClient;
-import com.amazonaws.services.dynamodbv2.document.DynamoDB;
-import com.amazonaws.services.dynamodbv2.document.Item;
-import com.amazonaws.services.dynamodbv2.document.Table;
-import com.amazonaws.services.dynamodbv2.document.spec.PutItemSpec;
 import com.amazonaws.services.lambda.runtime.Context;
-import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
-import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syndicate.deployment.annotations.environment.EnvironmentVariable;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
 import com.syndicate.deployment.model.RetentionSetting;
+import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
+import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 
-import java.math.BigDecimal;
-import java.time.Instant;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 @LambdaHandler(lambdaName = "api_handler",
         roleName = "task05-role",
@@ -34,40 +18,43 @@ import java.util.UUID;
 )
 @EnvironmentVariable(key = "TABLE_NAME", value = "${target_table}")
 public class ApiHandler implements RequestHandler<Map<String, Object>, Map<String, Object>> {
-    private final AmazonDynamoDB dynamoDBClient;
-    private final DynamoDB dynamoDB;
-    private static final ObjectMapper objectMapper = new ObjectMapper();
-
-    private static final String TABLE_NAME_ENV = System.getenv("TABLE_NAME");
-
-    public ApiHandler() {
-        dynamoDBClient = new AmazonDynamoDBClient();
-        dynamoDBClient.setRegion(Region.getRegion(Regions.EU_CENTRAL_1));
-        dynamoDB = new DynamoDB(dynamoDBClient);
+    private static final String TABLE_NAME_ENV = "TABLE_NAME";
+    private final String tableName;
+    private final DynamoDbClient db = DynamoDbClient.builder().build();
+    public ApiHandler(){
+        tableName = System.getenv(TABLE_NAME_ENV).contains("smtr-2c83ab08")
+                ? System.getenv(TABLE_NAME_ENV) : "cmtr-2c83ab08-Events";
+    }
+    public Map<String, Object> handleRequest(Map<String, Object> request, Context context) {
+        Event event = parseEvent(request);
+        saveEvent(event);
+        Map<String, Object> response = new HashMap<>();
+        response.put("statusCode", 201);
+        response.put("event", event);
+        return response;
     }
 
-    public Map<String, Object> handleRequest(Map<String, Object> request, Context context) {
-        final LambdaLogger logger = context.getLogger();
-        Map<String, String> content = (Map<String, String>) request.get("content");
-        String createdAt = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
-        int principalId = Integer.parseInt(request.get("principalId").toString());
-        String id = java.util.UUID.randomUUID().toString();
+    @SuppressWarnings("unchecked")
+    private Event parseEvent(Map<String, Object> request) {
+        int principalId = (int) request.get("principalId");
+        Map<String, Object> content = (Map<String, Object>) request.get("content");
+        Map<String, String> contentStringMap = new HashMap<>();
+        content.forEach((key, value) -> contentStringMap.put(key, String.valueOf(value)));
+        return new Event(principalId, contentStringMap);
+    }
 
-        Event event = new Event();
-        event.setBody(content);
-        event.setId(id);
-        event.setCreatedAt(createdAt);
-        event.setPrincipalId(principalId);
+    private void saveEvent(Event event) {
+        Map<String, AttributeValue> item = new HashMap<>();
+        item.put("id", AttributeValue.builder().s(event.getId()).build());
+        item.put("principalId", AttributeValue.builder().n(String.valueOf(event.getPrincipalId())).build());
+        item.put("createdAt", AttributeValue.builder().s(event.getCreatedAt()).build());
+        item.put("body", AttributeValue.builder().m(convertMapToAttributeValue(event.getBody())).build());
+        db.putItem(builder -> builder.tableName(tableName).item(item));
+    }
 
-/*
-        Table table = dynamoDB.getTable(TABLE_NAME_ENV);
-        table.putItem(new PutItemSpec().withItem(item));
-*/
-
-
-        Map<String, Object> response = new HashMap<>();
-        response.put("event",event);
-        response.put("statusCode",TABLE_NAME_ENV);
-        return response;
+    private Map<String, AttributeValue> convertMapToAttributeValue(Map<String, String> map) {
+        Map<String, AttributeValue> result = new HashMap<>();
+        map.forEach((key, value) -> result.put(key, AttributeValue.builder().s(value).build()));
+        return result;
     }
 }

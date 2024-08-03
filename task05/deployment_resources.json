@@ -25,14 +25,6 @@
     "resource_type": "iam_policy"
   },
   "task05-role": {
-    "predefined_policies": [],
-    "principal_service": "lambda",
-    "custom_policies": [
-      "lambda-basic-execution"
-    ],
-    "resource_type": "iam_role"
-  },
-  "api_handler-role": {
     "predefined_policies": [
       "AmazonDynamoDBFullAccess"
 

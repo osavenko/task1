@@ -19,7 +19,10 @@ import com.syndicate.deployment.annotations.environment.EnvironmentVariable;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
 import com.syndicate.deployment.model.RetentionSetting;
 
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -30,7 +33,7 @@ import java.util.UUID;
         logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED
 )
 @EnvironmentVariable(key = "TABLE_NAME", value = "${target_table}")
-public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
+public class ApiHandler implements RequestHandler<Map<String, Object>, Map<String, Object>> {
     private final AmazonDynamoDB dynamoDBClient;
     private final DynamoDB dynamoDB;
     private static final ObjectMapper objectMapper = new ObjectMapper();
@@ -43,46 +46,28 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
         dynamoDB = new DynamoDB(dynamoDBClient);
     }
 
-    public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent requestEvent, Context context) {
+    public Map<String, Object> handleRequest(Map<String, Object> request, Context context) {
         final LambdaLogger logger = context.getLogger();
+        Map<String, String> content = (Map<String, String>) request.get("content");
+        String createdAt = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
+        int principalId = Integer.parseInt(request.get("principalId").toString());
+        String id = java.util.UUID.randomUUID().toString();
 
-        logger.log("Path: "+requestEvent.getPath());
-        logger.log("Http method: "+requestEvent.getHttpMethod());
-        logger.log("Body: "+requestEvent.getBody());
+        Event event = new Event();
+        event.setBody(content);
+        event.setId(id);
+        event.setCreatedAt(createdAt);
+        event.setPrincipalId(principalId);
+
 /*
-        Event event = null;
-        try {
-            event = objectMapper.readValue(requestEvent.getBody(), Event.class);
-        } catch (JsonProcessingException e) {
-            logger.log("Error objectMapper");
-            e.printStackTrace();
-        }
-
-        Item item = new Item()
-                .withPrimaryKey("id", UUID.randomUUID().toString())
-                .withNumber("principalId", event.getPrincipalId())
-                .withString("createdAt", Instant.now().toString())
-                .withMap("body", event.getBody());
-        logger.log("Current Item: "+item.toJSON());
-*/
-        logger.log("Current table name: "+TABLE_NAME_ENV);
-//        Table table = dynamoDB.getTable(TABLE_NAME_ENV);
-//        table.putItem(new PutItemSpec().withItem(item));
-
-
-        Map<String, String> response = new HashMap<>();
-        response.put("event",requestEvent.getBody());
-        response.put("TABLE_NAME",TABLE_NAME_ENV);
-/*
-        try {
-            response.put("event", objectMapper.writeValueAsString(event));
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        Table table = dynamoDB.getTable(TABLE_NAME_ENV);
+        table.putItem(new PutItemSpec().withItem(item));
 */
 
-        return new APIGatewayProxyResponseEvent()
-                .withStatusCode(201)
-                .withBody(response.toString());
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("event",event);
+        response.put("statusCode",TABLE_NAME_ENV);
+        return response;
     }
 }

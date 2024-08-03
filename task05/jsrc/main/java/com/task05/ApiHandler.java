@@ -49,6 +49,7 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
         logger.log("Path: "+requestEvent.getPath());
         logger.log("Http method: "+requestEvent.getHttpMethod());
         logger.log("Body: "+requestEvent.getBody());
+/*
         Event event = null;
         try {
             event = objectMapper.readValue(requestEvent.getBody(), Event.class);
@@ -63,17 +64,22 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
                 .withString("createdAt", Instant.now().toString())
                 .withMap("body", event.getBody());
         logger.log("Current Item: "+item.toJSON());
+*/
         logger.log("Current table name: "+TABLE_NAME_ENV);
-        Table table = dynamoDB.getTable(TABLE_NAME_ENV);
-        table.putItem(new PutItemSpec().withItem(item));
+//        Table table = dynamoDB.getTable(TABLE_NAME_ENV);
+//        table.putItem(new PutItemSpec().withItem(item));
 
 
         Map<String, String> response = new HashMap<>();
+        response.put("event",requestEvent.getBody());
+        response.put("TABLE_NAME",TABLE_NAME_ENV);
+/*
         try {
             response.put("event", objectMapper.writeValueAsString(event));
         } catch (JsonProcessingException e) {
             e.printStackTrace();
         }
+*/
 
         return new APIGatewayProxyResponseEvent()
                 .withStatusCode(201)

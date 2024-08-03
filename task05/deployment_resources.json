@@ -46,12 +46,19 @@
           "authorization_type": "NONE",
           "integration_type": "lambda",
           "lambda_name": "api_handler",
-          "enable_proxy": true,
-          "api_key_required": false
+          "api_key_required": false,
+          "method_request_parameters": {},
+          "integration_request_body_template": {},
+          "responses": [],
+          "integration_responses": [],
+          "default_error_pattern": true,
+          "content_type":"application/json"
         }
       }
-    }
+    },
+    "minimum_compression_size": 0
   },
+
   "Events": {
     "resource_type": "dynamodb_table",
     "hash_key_name": "id",

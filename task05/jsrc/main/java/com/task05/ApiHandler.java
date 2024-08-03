@@ -23,7 +23,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-@LambdaHandler(lambdaName = "task05",
+@LambdaHandler(lambdaName = "api_handler",
         roleName = "task05-role",
         isPublishVersion = false,
         logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED

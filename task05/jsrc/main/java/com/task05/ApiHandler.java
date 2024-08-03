@@ -46,9 +46,9 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent requestEvent, Context context) {
         final LambdaLogger logger = context.getLogger();
 
-        logger.log(requestEvent.getPath());
-        logger.log(requestEvent.getHttpMethod());
-        logger.log(requestEvent.getBody());
+        logger.log("Path: "+requestEvent.getPath());
+        logger.log("Http method: "+requestEvent.getHttpMethod());
+        logger.log("Body: "+requestEvent.getBody());
         Event event = null;
         try {
             event = objectMapper.readValue(requestEvent.getBody(), Event.class);

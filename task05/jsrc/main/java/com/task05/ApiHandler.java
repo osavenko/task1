@@ -34,7 +34,7 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
     private final DynamoDB dynamoDB;
     private static final ObjectMapper objectMapper = new ObjectMapper();
 
-    private static final String TABLE_NAME_ENV = System.getenv("TABLE_NAME");
+    private static final String TABLE_NAME_ENV = "cmtr-2c83ab08-Events-test";//System.getenv("TABLE_NAME");
 
     public ApiHandler() {
         dynamoDBClient = new AmazonDynamoDBClient();

@@ -84,8 +84,6 @@ C
 task04/CHANGELOG.md,d\b\dbf69302f1841832114a93ca39b77924d049249a
 R
 "task04/deployment_resources.json_1,2\4\2491d5217cee5dee1acc6a66dfc0c19a3640c64d
-\
-,task05/jsrc/main/java/com/task05/Task05.java,c\c\cc4f7c5d50bfc6bdd020c760324f8752b791a1e9
 P
  task05/deployment_resources.json,4\1\417a00d3450baefd309341593f7e4cffb4547123
 A
@@ -98,3 +96,17 @@ A
 task05/README.md,3\9\394526d21bd45e304e18e2ee2d2248fe012c5ffc
 C
 task05/CHANGELOG.md,0\8\0858b937693b22934a60f0194fe5b39449b9351a
+`
+0task05/jsrc/main/java/com/task05/ApiHandler.java,8\6\86cbefa18809f67e2629e91b35f516301fe79a90
+>
+task06/pom.xml,4\c\4cb8a4d6542dc22f41adbef3010b4cf25e46ab0e
+C
+task06/CHANGELOG.md,1\7\17149da95443df6fa192e2d02b89dcf33de93a7b
+P
+ task06/deployment_resources.json,1\5\155561cd1b97c293dbc2a04f60b5fea12a64acbb
+c
+3task06/jsrc/main/java/com/task06/AuditProducer.java,b\b\bbb30755613c99e026d81292dc0855b33064582f
+A
+task06/.gitignore,e\1\e12b845a720c22de7c0f88d708244d8cd544e01e
+@
+task06/README.md,6\3\630413ae114060be452dc10a3c4bf75274792a76

@@ -5,6 +5,7 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import com.amazonaws.services.s3.model.ObjectMetadata;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.syndicate.deployment.annotations.environment.EnvironmentVariable;
@@ -30,7 +31,7 @@ import java.util.stream.IntStream;
 @RuleEventSource(targetRule = "uuid_trigger")
 //@EnvironmentVariable(key = "BUCKET_NAME", value = "cmtr-2c83ab08-uuid-storage")
 @EnvironmentVariable(key = "BUCKET_NAME", value = "${target_bucket}")
-public class UuidGenerator implements RequestHandler<Object,Void> {
+public class UuidGenerator implements RequestHandler<Object,String> {
 	private final String bucketName;
 	private final AmazonS3 s3Client = AmazonS3ClientBuilder.defaultClient();
 
@@ -38,7 +39,7 @@ public class UuidGenerator implements RequestHandler<Object,Void> {
 		bucketName = System.getenv("BUCKET_NAME");
 	}
 
-	public Void handleRequest(Object request, Context context) {
+	public String handleRequest(Object request, Context context) {
 		final LambdaLogger logger = context.getLogger();
 		final List<String> strings = IntStream.range(0, Math.max(1, 10))
 				.mapToObj(i -> UUID.randomUUID().toString())
@@ -48,9 +49,13 @@ public class UuidGenerator implements RequestHandler<Object,Void> {
 		logger.log("UUIDs: " + uuids);
 
 		final String objectName = LocalDateTime.now().format(DateTimeFormatter.ISO_DATE_TIME);
-		s3Client.putObject(bucketName, objectName, new ByteArrayInputStream(prepareJson(uuids).getBytes(StandardCharsets.UTF_8)), null);
+		final String content = prepareJson(uuids);
+		ObjectMetadata metadata = new ObjectMetadata();
+		metadata.setContentLength(content.getBytes().length);
+
+		s3Client.putObject(bucketName, objectName, new ByteArrayInputStream(content.getBytes()), metadata);
 		logger.log("Object " + objectName+" was uploaded.");
-		return null;
+		return "Object " + objectName+" was uploaded.";
     }
 	private String prepareJson(Map<String, List<String>> uuids) {
 		try {
@@ -59,5 +64,4 @@ public class UuidGenerator implements RequestHandler<Object,Void> {
 			throw new RuntimeException("Failed to convert to JSON", e);
 		}
 	}
-
 }

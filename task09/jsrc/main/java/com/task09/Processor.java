@@ -29,8 +29,8 @@ import java.util.UUID;
 )
 @LambdaUrlConfig(authType = AuthType.NONE, invokeMode = InvokeMode.BUFFERED)
 public class Processor implements RequestHandler<APIGatewayProxyRequestEvent, String> {
-    //private static final String DYNAMODB_TABLE = "cmtr-2c83ab08-Weather-test";
-    private static final String DYNAMODB_TABLE = "cmtr-2c83ab08-Weather";
+    private static final String DYNAMODB_TABLE = "cmtr-2c83ab08-Weather-test";
+    //private static final String DYNAMODB_TABLE = "cmtr-2c83ab08-Weather";
     private final AmazonDynamoDB dynamoDBClient;
     private final DynamoDB dynamoDB;
 

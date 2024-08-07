@@ -33,7 +33,6 @@
     "resource_type": "iam_role"
   },
   "task8_api": {
-    "resource_type": "api_gateway",
     "deploy_stage": "api",
     "dependencies": [
       {
@@ -43,18 +42,17 @@
     ],
     "resources": {
       "/weather": {
-        "enable_cors": false,
         "GET": {
+          "integration_request_body_template": {},
           "authorization_type": "NONE",
           "integration_type": "lambda",
-          "api_key_required": false,
           "method_request_parameters": {},
-          "integration_request_body_template": {},
-          "responses": [],
-          "integration_responses": [],
-          "default_error_pattern": true
+          "default_error_pattern": true,
+          "integration_passthrough_behavior": "WHEN_NO_TEMPLATES",
+          "lambda_name": "api_handler"
         }
       }
-    }
+    },
+    "resource_type": "api_gateway"
   }
 }

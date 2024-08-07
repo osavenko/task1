@@ -27,6 +27,7 @@ import java.util.Map;
         logsExpiration = RetentionSetting.SYNDICATE_ALIASES_SPECIFIED,
         layers = {"sdk-layer"}
 )
+
 @LambdaLayer(
         layerName = "sdk-layer",
         libraries = {"lib/gson-2.10.1.jar"},

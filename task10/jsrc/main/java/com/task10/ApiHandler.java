@@ -25,6 +25,7 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
         String path = request.getPath();
         final LambdaLogger logger = context.getLogger();
 
+/*
         logger.log("=========Current request :" + request);
         logger.log("=========Current path: " + path);
         logger.log("=========Current method: " + request.getHttpMethod());
@@ -33,14 +34,14 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
         logger.log("========= SIGN UP" + path.equals(Path.SING_UP));
         logger.log("========= RESERVATION" + path.equals(Path.RESERVATIONS));
         logger.log("========= TABLES" + path.equals(Path.TABLES));
+*/
 
         switch (path) {
-            case Path.SING_IN: {
-                logger.log("========SingIn operation ");
+            case Path.SIGN_IN: {
+                logger.log("========>>>>>>>>>>>>>SignIn operation ");
                 return new SingInHandler().handleRequest(request, context);
             }
             case Path.SING_UP: {
-                logger.log("========SingUp operation ");
                 return new SingUpHandler().handleRequest(request, context);
             }
             case Path.TABLES: {

@@ -58,7 +58,7 @@ public class Task10Util {
     }
     public static class Path{
         public static final String SING_UP = "/signup";
-        public static final String SING_IN = "/signin";
+        public static final String SIGN_IN = "/signin";
         public static final String TABLES = "/tables";
         public static final String RESERVATIONS = "/reservations";
     }

@@ -8,7 +8,7 @@ import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.task10.model.SingIn;
+import com.task10.model.SignIn;
 
 import java.util.List;
 import java.util.Map;
@@ -20,36 +20,38 @@ public class SingInHandler {
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         final LambdaLogger logger = context.getLogger();
-        logger.log("SingIp body: " + request.getBody());
+        logger.log(">>>>>>>>>>>>>>SingIp body: " + request.getBody());
 
-/*
+
         if (!request.getHttpMethod().equals(HttpMethod.POST)) {
             logger.log("Incorrect method, need POST current: " + request.getHttpMethod());
             response.setStatusCode(StatusCode.BAD_REQUEST);
             return response;
 
         }
-*/
 
         try {
             final Map<String, String> singInRequest = new ObjectMapper().readValue(request.getBody(), Map.class);
-            final SingIn singIn = SingIn.getInstance(singInRequest);
-            logger.log("SingIp body: " + request.getBody());
-            logger.log("SingIp object: " + singIn.toString());
+            final SignIn signIn = SignIn.getInstance(singInRequest);
+            logger.log(">>>>>>>>>>>>>>>SingIp body: " + request.getBody());
+            logger.log(">>>>>>>>>>>>>>>SingIp object: " + signIn);
 
-
+            logger.log(">>>>>>>>>>>> Create AWSCognitoIdentityProvider");
             AWSCognitoIdentityProvider cognitoClient = AWSCognitoIdentityProviderClientBuilder.defaultClient();
 
-            List<UserType> userTypeList = getUserTypeList(cognitoClient, singIn);
+            logger.log(">>>>>>>>>>>> AWSCognitoIdentityProvider was created");
+            List<UserType> userTypeList = getUserTypeList(cognitoClient, signIn);
+            logger.log(">>>>>>>>>>>> getUserTypeList:  " + userTypeList.isEmpty());
             if (userTypeList.isEmpty()) {
-                        response.setStatusCode(StatusCode.BAD_REQUEST);
+                response.setStatusCode(StatusCode.BAD_REQUEST);
                 return response;
             }
 
-            final String accessToken = getAccessToken(singIn, cognitoClient);
+            final String accessToken = getAccessToken(signIn, cognitoClient);
 
             response.setStatusCode(StatusCode.SUCCESS);
             response.setBody("{\"accessToken\": \"" + accessToken + "\"}");
+            logger.log(">>>>>>>>>>>> ++++++++++++++++++++++++++++++++++++" );
             return response;
         } catch (Exception e) {
             logger.log("Exception: " + e.getMessage());
@@ -60,28 +62,27 @@ public class SingInHandler {
 
     }
 
-    private String getAccessToken(SingIn singIn, AWSCognitoIdentityProvider cognitoClient) {
+    private String getAccessToken(SignIn signIn, AWSCognitoIdentityProvider cognitoClient) {
         AdminInitiateAuthRequest authRequest = new AdminInitiateAuthRequest()
                 .withAuthFlow(AuthFlowType.ADMIN_NO_SRP_AUTH)
                 .withUserPoolId(getUserPoolId())
                 .withClientId(getUserClientId())
-                .addAuthParametersEntry(SingInAttributesName.USER_NAME, singIn.getEmail())
-                .addAuthParametersEntry(SingInAttributesName.PASSWORD, singIn.getPassword());
+                .addAuthParametersEntry(SingInAttributesName.USER_NAME, signIn.getEmail())
+                .addAuthParametersEntry(SingInAttributesName.PASSWORD, signIn.getPassword());
 
         return cognitoClient.adminInitiateAuth(authRequest)
                 .getAuthenticationResult()
                 .getAccessToken();
     }
 
-    private List<UserType> getUserTypeList(AWSCognitoIdentityProvider cognitoClient, SingIn singIn) {
+    private List<UserType> getUserTypeList(AWSCognitoIdentityProvider cognitoClient, SignIn signIn) {
         ListUsersRequest listUsersRequest = new ListUsersRequest()
                 .withUserPoolId(getUserPoolId())
                 .withLimit(60);
         ListUsersResult listUsersResult = cognitoClient.listUsers(listUsersRequest);
 
-        List<UserType> userTypeList = listUsersResult.getUsers().stream()
-                .filter(u -> u.getUsername().equals(singIn.getEmail()))
+        return listUsersResult.getUsers().stream()
+                .filter(u -> u.getUsername().equals(signIn.getEmail()))
                 .collect(Collectors.toList());
-        return userTypeList;
     }
 }

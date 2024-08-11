@@ -66,114 +66,90 @@
     }
   },
   "task10_api": {
-    "resource_type": "api_gateway",
     "deploy_stage": "api",
-    "dependencies": [],
     "resources": {
-      "/singup": {
+      "/signup": {
         "POST": {
+          "integration_request_body_template": {},
           "authorization_type": "NONE",
           "integration_type": "lambda",
-          "lambda_name": "api_handler",
           "method_request_parameters": {},
-          "integration_request_body_template": {},
           "default_error_pattern": true,
           "integration_passthrough_behavior": "WHEN_NO_TEMPLATES",
+          "lambda_name": "api_handler",
           "enable_proxy": true
         }
       },
-      "/singin": {
+      "/signin": {
         "POST": {
+          "integration_request_body_template": {},
           "authorization_type": "NONE",
           "integration_type": "lambda",
-          "lambda_name": "api_handler",
           "method_request_parameters": {},
-          "integration_request_body_template": {},
           "default_error_pattern": true,
           "integration_passthrough_behavior": "WHEN_NO_TEMPLATES",
+          "lambda_name": "api_handler",
           "enable_proxy": true
         }
       },
       "/tables": {
         "GET": {
+          "integration_request_body_template": {},
           "authorization_type": "NONE",
           "integration_type": "lambda",
-          "lambda_name": "api_handler",
           "method_request_parameters": {},
-          "integration_request_body_template": {},
           "default_error_pattern": true,
           "integration_passthrough_behavior": "WHEN_NO_TEMPLATES",
+          "lambda_name": "api_handler",
           "enable_proxy": true
         },
         "POST": {
+          "integration_request_body_template": {},
           "authorization_type": "NONE",
           "integration_type": "lambda",
-          "lambda_name": "api_handler",
-          "api_key_required": false,
           "method_request_parameters": {},
-          "integration_request_body_template": {},
-          "responses": [],
-          "integration_responses": [],
           "default_error_pattern": true,
-
           "integration_passthrough_behavior": "WHEN_NO_TEMPLATES",
+          "lambda_name": "api_handler",
           "enable_proxy": true
-
         }
       },
-      "/tables/{tableid}": {
-        "enable_cors": true,
+      "/tables/{tableId}": {
         "GET": {
+          "integration_request_body_template": {},
           "authorization_type": "NONE",
           "integration_type": "lambda",
-          "lambda_name": "api_handler",
-          "api_key_required": false,
           "method_request_parameters": {},
-          "integration_request_body_template": {},
-          "responses": [],
-          "integration_responses": [],
-          "default_error_pattern": true
+          "default_error_pattern": true,
+          "integration_passthrough_behavior": "WHEN_NO_TEMPLATES",
+          "lambda_name": "api_handler",
+          "enable_proxy": true
         }
       },
       "/reservations": {
-        "enable_cors": true,
-        "POST": {
-          "authorization_type": "NONE",
-          "integration_type": "lambda",
-          "lambda_name": "api_handler",
-          "api_key_required": false,
-          "method_request_parameters": {},
-          "integration_request_body_template": {},
-          "responses": [],
-          "integration_responses": [],
-          "default_error_pattern": true
-        },
         "GET": {
+          "integration_request_body_template": {},
           "authorization_type": "NONE",
           "integration_type": "lambda",
-          "lambda_name": "api_handler",
-          "api_key_required": false,
           "method_request_parameters": {},
-          "integration_request_body_template": {},
-          "responses": [],
-          "integration_responses": [],
           "default_error_pattern": true,
-
           "integration_passthrough_behavior": "WHEN_NO_TEMPLATES",
+          "lambda_name": "api_handler",
+          "enable_proxy": true
+        },
+        "POST": {
+          "integration_request_body_template": {},
+          "authorization_type": "NONE",
+          "integration_type": "lambda",
+          "method_request_parameters": {},
+          "default_error_pattern": true,
+          "integration_passthrough_behavior": "WHEN_NO_TEMPLATES",
+          "lambda_name": "api_handler",
           "enable_proxy": true
         }
       }
     },
-    "authorizers": {
-      "authorizer": {
-        "type": "COGNITO_USER_POOLS",
-        "identity_source": "method.request.header.Authorization",
-        "ttl": 300,
-        "user_pools": [
-          "simple-booking-userpool"
-        ]
-      }
-    }
+    "resource_type": "api_gateway"
   },
   "Tables": {
     "resource_type": "dynamodb_table",

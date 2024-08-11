@@ -17,14 +17,20 @@ import java.util.stream.Collectors;
 import static com.task10.Task10Util.*;
 
 public class SingInHandler {
-    public APIGatewayProxyResponseEvent execute(APIGatewayProxyRequestEvent request, Context context) {
+    public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
-
         final LambdaLogger logger = context.getLogger();
+        if (!request.getHttpMethod().equals(HttpMethod.POST)) {
+            logger.log("Incorrect method, need POST current: " + request.getHttpMethod());
+
+            response.setStatusCode(StatusCode.BAD_REQUEST);
+            return response;
+
+        }
 
         try {
             final Map<String, String> singInRequest = new ObjectMapper().readValue(request.getBody(), Map.class);
-            final SingIn singIn = SingIn.getSingIn(singInRequest);
+            final SingIn singIn = SingIn.getInstance(singInRequest);
             logger.log("SingIp body: " + request.getBody());
             logger.log("SingIp object: " + singIn.toString());
 

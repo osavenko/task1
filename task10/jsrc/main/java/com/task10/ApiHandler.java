@@ -9,6 +9,9 @@ import com.syndicate.deployment.annotations.lambda.LambdaHandler;
 import com.syndicate.deployment.model.RetentionSetting;
 import com.task10.handler.SingInHandler;
 import com.task10.handler.SingUpHandler;
+import com.task10.handler.TableHandler;
+
+import static com.task10.Task10Util.*;
 
 @LambdaHandler(lambdaName = "api_handler",
         roleName = "api_handler-role",
@@ -27,20 +30,23 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
         logger.log("Current method: " + request.getHttpMethod());
         logger.log("Current body: " + request.getBody());
         switch (path) {
-            case Task10Util.Path.SING_IN: {
+            case Path.SING_IN: {
                 logger.log("Singin operation ");
-                return new SingInHandler().execute(request,context);
+                return new SingInHandler().handleRequest(request, context);
             }
-            case Task10Util.Path.SING_UP: {
+            case Path.SING_UP: {
                 logger.log("Singup operation ");
-                return new SingUpHandler().execute(request,context);
+                return new SingUpHandler().handleRequest(request, context);
             }
-            case Task10Util.Path.TABLES:
+            case Path.TABLES: {
                 logger.log("Tables operation ");
-            case Task10Util.Path.RESERVATIONS:
+                return new TableHandler().handleRequest(request, context);
+            }
+            case Path.RESERVATIONS: {
                 logger.log("Reservation operation ");
+            }
         }
-		logger.log("Unknown path");
+        logger.log("Unknown path");
         responseEvent.setStatusCode(201);
         responseEvent.setBody("Unknown path");
         return responseEvent;

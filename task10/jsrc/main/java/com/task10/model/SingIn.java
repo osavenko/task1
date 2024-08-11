@@ -27,7 +27,7 @@ public class SingIn {
                 '}';
     }
 
-    public static SingIn getSingIn(Map<String, String> body){
+    public static SingIn getInstance(Map<String, String> body){
         final SingIn singIn = new SingIn();
         singIn.email = body.get(Task10Util.SingInField.EMAIL);
         singIn.password = body.get(Task10Util.SingInField.PASSWORD);

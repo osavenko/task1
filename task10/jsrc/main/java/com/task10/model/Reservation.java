@@ -43,7 +43,7 @@ public class Reservation {
     public String getSlotTimeEnd() {
         return slotTimeEnd;
     }
-    private static Reservation getInstance(Map<String, Object> body){
+    public static Reservation getInstance(Map<String, Object> body){
         final Reservation reservation = new Reservation();
         reservation.id = body.get(Task10Util.ReservationField.ID).toString();
         reservation.tableNumber = (int)body.get(Task10Util.ReservationField.TABLE_NUMBER);

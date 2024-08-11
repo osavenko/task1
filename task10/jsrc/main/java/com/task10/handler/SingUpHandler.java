@@ -17,9 +17,17 @@ import java.util.Map;
 import static com.task10.Task10Util.*;
 
 public class SingUpHandler {
-    public APIGatewayProxyResponseEvent execute(APIGatewayProxyRequestEvent request, Context context) {
+    public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         final LambdaLogger logger = context.getLogger();
+
+        if (!request.getHttpMethod().equals(HttpMethod.POST)) {
+            logger.log("Incorrect method, need POST current: " + request.getHttpMethod());
+
+            response.setStatusCode(StatusCode.BAD_REQUEST);
+            return response;
+        }
+
         try {
             Map<String, String> singUpBody = new ObjectMapper().readValue(request.getBody(), Map.class);
             SingUp singUp = SingUp.getInstance(singUpBody);
@@ -57,6 +65,4 @@ public class SingUpHandler {
             return response;
         }
     }
-
-
 }

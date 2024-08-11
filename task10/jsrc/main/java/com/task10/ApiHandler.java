@@ -40,7 +40,6 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
                 logger.log("=======Reservation operation ");
                 return ReservationHandler.handleRequest(request,context);
             }
-            default:
         }
         logger.log("======TABLE PATH WITH ID path:   "+path);
         return new TableHandler().handleRequest(request, context);

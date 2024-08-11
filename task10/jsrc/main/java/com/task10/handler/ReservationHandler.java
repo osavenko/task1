@@ -33,20 +33,26 @@ public class ReservationHandler {
             DynamoDB dynamoDB = new DynamoDB(dynamoDBClient);
 
             Table reservationTables = dynamoDB.getTable(DYNAMODB_RESERVATION);
+            logger.log(">>>>>>>>>"+reservationTables.getTableName());
             response.setStatusCode(StatusCode.SUCCESS);
             switch (request.getHttpMethod()) {
                 case HttpMethod.GET: {
+                    logger.log(">>>>>>>>> GET TO "+request.getPath()+" and table name "+reservationTables.getTableName());
                     List<Map<String, AttributeValue>> items = DynamoDBUtils.getAllItemsFromTable(dynamoDBClient, DYNAMODB_RESERVATION);
                     Map<String, List<Map<String, Object>>> body = convertToJSON(items);
                     response.setBody(new ObjectMapper().writeValueAsString(body));
                     return response;
                 }
                 case HttpMethod.POST: {
+                    logger.log(">>>>>>>>> POST TO "+request.getPath()+" and table name "+reservationTables.getTableName());
+                    logger.log(">>>>>>>>>>> reservation body: "+request.getBody());
                     Map<String, Object> bodyReservation = new ObjectMapper().readValue(request.getBody(), Map.class);
 
                     final Reservation reservation = Reservation.getInstance(bodyReservation);
-
+                    logger.log(">>>>>>>>>>> reservation object: "+reservation.toString());
                     List<Map<String, AttributeValue>> reservationRecords = DynamoDBUtils.getAllItemsFromTable(dynamoDBClient, DYNAMODB_RESERVATION);
+
+                    logger.log(">>>>>>>>>>> reservationRecords: "+reservationRecords.size());
 
                     for (Map<String, AttributeValue> reservationRecord : reservationRecords) {
                         int tableNumber = Integer.parseInt(reservationRecord.get(ReservationField.TABLE_NUMBER).getN());
@@ -58,10 +64,12 @@ public class ReservationHandler {
                     }
 
                     List<Map<String, AttributeValue>> tableRecords = DynamoDBUtils.getAllItemsFromTable(dynamoDBClient, DYNAMODB_TABLE);
+                    logger.log(">>>>>>>>>>>> tableRecords"+tableRecords);
                     List<Map<String, AttributeValue>> findTable = tableRecords.stream().filter(tableRecord ->
                                     Integer.parseInt(tableRecord.get(TableField.NUMBER).getN()) == reservation.getTableNumber())
                             .collect(Collectors.toList());
-
+                    logger.log(">>>>>>>>>>>> findTable"+findTable);
+                    logger.log(">>>>>>>> findTable.isEmpty()"+findTable.isEmpty());
                     if (findTable.isEmpty()) {
                         response.setStatusCode(StatusCode.BAD_REQUEST);
                         return response;

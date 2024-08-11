@@ -86,6 +86,7 @@ public class ReservationHandler {
                             .withString(ReservationField.SLOT_TIME_START, reservation.getSlotTimeStart())
                             .withString(ReservationField.SLOT_TIME_END, reservation.getSlotTimeEnd());
                     reservationTables.putItem(item);
+
                     response.setBody("{\"reservationId\": \"" + reservation.getId() + "\"}");
                 }
             }

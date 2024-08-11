@@ -55,4 +55,17 @@ public class Reservation {
         reservation.slotTimeEnd = body.get(Task10Util.ReservationField.SLOT_TIME_END).toString();
         return reservation;
     }
+
+    @Override
+    public String toString() {
+        return "Reservation{" +
+                "id='" + id + '\'' +
+                ", tableNumber=" + tableNumber +
+                ", clientName='" + clientName + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", date='" + date + '\'' +
+                ", slotTimeStart='" + slotTimeStart + '\'' +
+                ", slotTimeEnd='" + slotTimeEnd + '\'' +
+                '}';
+    }
 }

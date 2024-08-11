@@ -3,6 +3,7 @@ package com.task10.model;
 import com.task10.Task10Util;
 
 import java.util.Map;
+import java.util.UUID;
 
 public class Reservation {
     private String id;
@@ -45,9 +46,10 @@ public class Reservation {
     }
     public static Reservation getInstance(Map<String, Object> body){
         final Reservation reservation = new Reservation();
-        reservation.id = body.get(Task10Util.ReservationField.ID).toString();
+        reservation.id = UUID.randomUUID().toString();
         reservation.tableNumber = (int)body.get(Task10Util.ReservationField.TABLE_NUMBER);
         reservation.clientName = body.get(Task10Util.ReservationField.CLIENT_NAME).toString();
+        reservation.phoneNumber = body.get(Task10Util.ReservationField.PHONE_NUMBER).toString();
         reservation.date = body.get(Task10Util.ReservationField.DATE).toString();
         reservation.slotTimeStart = body.get(Task10Util.ReservationField.SLOT_TIME_START).toString();
         reservation.slotTimeEnd = body.get(Task10Util.ReservationField.SLOT_TIME_END).toString();

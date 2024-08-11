@@ -46,10 +46,12 @@ public class ReservationHandler {
                 case HttpMethod.POST: {
                     logger.log(">>>>>>>>> POST TO "+request.getPath()+" and table name "+reservationTables.getTableName());
                     logger.log(">>>>>>>>>>> reservation body: "+request.getBody());
-                    Map<String, Object> bodyReservation = new ObjectMapper().readValue(request.getBody(), Map.class);
+                    Map<String, Object> mapReservation = new ObjectMapper().readValue(request.getBody(), Map.class);
 
-                    final Reservation reservation = Reservation.getInstance(bodyReservation);
-                    logger.log(">>>>>>>>>>> reservation object: "+reservation.toString());
+                    logger.log(">>>>>>>>>>> reservation body: "+mapReservation);
+
+                    final Reservation reservation = Reservation.getInstance(mapReservation);
+                    logger.log(">>>>>>>>>>> reservation object: "+reservation);
                     List<Map<String, AttributeValue>> reservationRecords = DynamoDBUtils.getAllItemsFromTable(dynamoDBClient, DYNAMODB_RESERVATION);
 
                     logger.log(">>>>>>>>>>> reservationRecords: "+reservationRecords.size());

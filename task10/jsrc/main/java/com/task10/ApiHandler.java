@@ -47,7 +47,7 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
             }
         }
         logger.log("Unknown path");
-        responseEvent.setStatusCode(201);
+        responseEvent.setStatusCode(StatusCode.BAD_REQUEST);
         responseEvent.setBody("Unknown path");
         return responseEvent;
     }

@@ -7,6 +7,7 @@ import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 import com.syndicate.deployment.annotations.lambda.LambdaHandler;
 import com.syndicate.deployment.model.RetentionSetting;
+import com.task10.handler.ReservationHandler;
 import com.task10.handler.SingInHandler;
 import com.task10.handler.SingUpHandler;
 import com.task10.handler.TableHandler;
@@ -33,15 +34,13 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
                 return new SingUpHandler().handleRequest(request, context);
             }
             case Path.TABLES: {
-                logger.log("===========Tables operation ");
                 return new TableHandler().handleRequest(request, context);
             }
             case Path.RESERVATIONS: {
                 logger.log("=======Reservation operation ");
-                return new TableHandler().handleRequest(request,context);
+                return ReservationHandler.handleRequest(request,context);
             }
             default:
-                logger.log("00000000000000000000 0  00000000000 0000000 Неочикувана фігня");
         }
         logger.log("======TABLE PATH WITH ID path:   "+path);
         return new TableHandler().handleRequest(request, context);

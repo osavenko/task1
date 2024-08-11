@@ -24,7 +24,7 @@ import static com.task10.Task10Util.*;
 public class TableHandler {
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
-        final LambdaLogger logger = context.getLogger();
+        LambdaLogger logger = context.getLogger();
         try {
             AmazonDynamoDBClient dynamoDBClient = new AmazonDynamoDBClient();
             dynamoDBClient.setRegion(Region.getRegion(Regions.EU_CENTRAL_1));
@@ -35,14 +35,14 @@ public class TableHandler {
             switch (request.getHttpMethod()) {
                 case HttpMethod.GET: {
                     String[] splitPath = request.getPath().split("/");
-                    logger.log("++++++++++++++++++>>>"+request.getPath());
+//                    logger.log("++++++++++++++++++>>>"+request.getPath());
                     if (splitPath.length > 2) {
-                        logger.log("++++++++++++++++++>>> splitPath.length > 2");
+//                        logger.log("++++++++++++++++++>>> splitPath.length > 2");
                         Item item = tables.getItem(TableField.ID, Integer.parseInt(splitPath[splitPath.length - 1]));
                         Map<String, Object> body = convertItemToMap(item);
                         response.setBody(new ObjectMapper().writeValueAsString(body));
                     } else {
-                        logger.log("++++++++++++++++++>>> splitPath.length < 2"+request.getPath());
+//                        logger.log("++++++++++++++++++>>> splitPath.length < 2"+request.getPath());
                         List<Map<String, AttributeValue>> items = DynamoDBUtils.getAllItemsFromTable(dynamoDBClient, DYNAMODB_TABLE);
                         Map<String, List<Map<String, Object>>> body = convertItemToMap(items);
                         response.setBody(new ObjectMapper().writeValueAsString(body));

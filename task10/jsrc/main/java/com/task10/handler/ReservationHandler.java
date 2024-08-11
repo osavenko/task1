@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 import static com.task10.Task10Util.*;
 
 public class ReservationHandler {
-    public static APIGatewayProxyResponseEvent execute(APIGatewayProxyRequestEvent request, Context context) {
+    public static APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         final LambdaLogger logger = context.getLogger();
         try {

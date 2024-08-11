@@ -5,12 +5,12 @@ import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProviderClientBuilder
 import com.amazonaws.services.cognitoidp.model.*;
 
 public class Task10Util {
-    //private static final String USER_POOL_NAME ="cmtr-2c83ab08-simple-booking-userpool-test";
-    //public static final String DYNAMODB_TABLE = "cmtr-2c83ab08-Tables-test";
-    //public static final String DYNAMODB_RESERVATION = "cmtr-2c83ab08-Reservations-test";
-    private static final String USER_POOL_NAME ="cmtr-2c83ab08-simple-booking-userpool";
-    public static final String DYNAMODB_TABLE = "cmtr-2c83ab08-Tables";
-    public static final String DYNAMODB_RESERVATION = "cmtr-2c83ab08-Reservations";
+    private static final String USER_POOL_NAME ="cmtr-2c83ab08-simple-booking-userpool-test";
+    public static final String DYNAMODB_TABLE = "cmtr-2c83ab08-Tables-test";
+    public static final String DYNAMODB_RESERVATION = "cmtr-2c83ab08-Reservations-test";
+    //private static final String USER_POOL_NAME ="cmtr-2c83ab08-simple-booking-userpool";
+    //public static final String DYNAMODB_TABLE = "cmtr-2c83ab08-Tables";
+    //public static final String DYNAMODB_RESERVATION = "cmtr-2c83ab08-Reservations";
 
 
     public static class StatusCode{

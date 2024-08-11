@@ -21,12 +21,12 @@ public class SingUpHandler {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         final LambdaLogger logger = context.getLogger();
 
-        if (!request.getHttpMethod().equals(HttpMethod.POST)) {
+/*        if (!request.getHttpMethod().equals(HttpMethod.POST)) {
             //logger.log("Incorrect method, need POST current: " + request.getHttpMethod());
 
             response.setStatusCode(StatusCode.BAD_REQUEST);
             return response;
-        }
+        }*/
 
         try {
             Map<String, String> singUpBody = new ObjectMapper().readValue(request.getBody(), Map.class);

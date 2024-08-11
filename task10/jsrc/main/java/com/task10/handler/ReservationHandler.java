@@ -43,7 +43,7 @@ public class ReservationHandler {
                 }
                 case HttpMethod.POST: {
                     Map<String, Object> bodyReservation = new ObjectMapper().readValue(request.getBody(), Map.class);
-                    //ReservationRequestModel reservationRequestModel = new ReservationRequestModel(body);
+
                     final Reservation reservation = Reservation.getInstance(bodyReservation);
 
                     List<Map<String, AttributeValue>> reservationRecords = DynamoDBUtils.getAllItemsFromTable(dynamoDBClient, DYNAMODB_RESERVATION);

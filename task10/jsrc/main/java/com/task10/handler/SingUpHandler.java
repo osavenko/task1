@@ -22,7 +22,7 @@ public class SingUpHandler {
         final LambdaLogger logger = context.getLogger();
 
         if (!request.getHttpMethod().equals(HttpMethod.POST)) {
-            logger.log("Incorrect method, need POST current: " + request.getHttpMethod());
+            //logger.log("Incorrect method, need POST current: " + request.getHttpMethod());
 
             response.setStatusCode(StatusCode.BAD_REQUEST);
             return response;
@@ -32,8 +32,10 @@ public class SingUpHandler {
             Map<String, String> singUpBody = new ObjectMapper().readValue(request.getBody(), Map.class);
             SingUp singUp = SingUp.getInstance(singUpBody);
 
+/*
             logger.log("SingUp body: " + request.getBody());
             logger.log("SingUp object: " + singUpBody.toString());
+*/
 
             SignUpRequest signUpRequest = new SignUpRequest()
                     .withClientId(getUserClientId())
@@ -59,7 +61,7 @@ public class SingUpHandler {
             response.setStatusCode(StatusCode.SUCCESS);
             return response;
         } catch (Exception e) {
-            logger.log("Exception: " + e.getMessage());
+//            logger.log("Exception: " + e.getMessage());
 
             response.setStatusCode(StatusCode.BAD_REQUEST);
             return response;

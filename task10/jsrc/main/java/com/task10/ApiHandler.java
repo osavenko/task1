@@ -35,20 +35,17 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
                 return new SingInHandler().handleRequest(request, context);
             }
             case Path.SING_UP: {
-                logger.log("Singup operation ");
                 return new SingUpHandler().handleRequest(request, context);
             }
             case Path.TABLES: {
-                logger.log("Tables operation ");
                 return new TableHandler().handleRequest(request, context);
             }
             case Path.RESERVATIONS: {
-                logger.log("Reservation operation ");
+                return new TableHandler().handleRequest(request,context);
             }
         }
         logger.log("Unknown path");
         responseEvent.setStatusCode(StatusCode.BAD_REQUEST);
-        responseEvent.setBody("Unknown path");
         return responseEvent;
     }
 }

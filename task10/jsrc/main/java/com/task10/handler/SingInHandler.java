@@ -20,13 +20,16 @@ public class SingInHandler {
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         final LambdaLogger logger = context.getLogger();
+        logger.log("SingIp body: " + request.getBody());
+
+/*
         if (!request.getHttpMethod().equals(HttpMethod.POST)) {
             logger.log("Incorrect method, need POST current: " + request.getHttpMethod());
-
             response.setStatusCode(StatusCode.BAD_REQUEST);
             return response;
 
         }
+*/
 
         try {
             final Map<String, String> singInRequest = new ObjectMapper().readValue(request.getBody(), Map.class);
@@ -39,8 +42,7 @@ public class SingInHandler {
 
             List<UserType> userTypeList = getUserTypeList(cognitoClient, singIn);
             if (userTypeList.isEmpty()) {
-                logger.log("userTypeList.isEmpty()");
-                response.setStatusCode(StatusCode.BAD_REQUEST);
+                        response.setStatusCode(StatusCode.BAD_REQUEST);
                 return response;
             }
 

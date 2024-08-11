@@ -73,9 +73,9 @@ public class ReservationHandler {
                         response.setStatusCode(StatusCode.BAD_REQUEST);
                         return response;
                     }
-                    String id = UUID.randomUUID().toString();
+//                    String id = "uuid v4";
                     Item item = new Item()
-                            .withPrimaryKey(ReservationField.ID, id)
+                            .withPrimaryKey(ReservationField.ID, reservation.getId())
                             .withInt(ReservationField.TABLE_NUMBER, reservation.getTableNumber())
                             .withString(ReservationField.CLIENT_NAME, reservation.getClientName())
                             .withString(ReservationField.PHONE_NUMBER, reservation.getPhoneNumber())
@@ -84,7 +84,9 @@ public class ReservationHandler {
                             .withString(ReservationField.SLOT_TIME_END, reservation.getSlotTimeEnd());
                     reservationTables.putItem(item);
 
-                    response.setBody("{\"reservationId\": \"" + id + "\"}");
+                    response.setBody("{\"reservationId\": \"" + reservation.getId() + "\"}");
+                    response.setStatusCode(StatusCode.SUCCESS);
+                    return response;
                 }
             }
         } catch (Exception e) {

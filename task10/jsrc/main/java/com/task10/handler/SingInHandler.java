@@ -48,6 +48,11 @@ public class SingInHandler {
             logger.log(">>>>>>>>>>>> listUsersRequest: "+listUsersRequest);
             ListUsersResult result = cognitoClient.listUsers(listUsersRequest);
             logger.log(">>>>>>>>>>>> listUsers was called: "+result.getUsers());
+            result.getUsers().stream()
+                    .forEach(userType->{
+                        logger.log(">>>>>>>>>>>========"+userType.getUsername());
+                        logger.log(">>>>>>>>>>>========"+userType.getAttributes());
+                    });
             List<UserType> userTypeList = result.getUsers().stream()
                     .filter(userType ->
                             userType.getUsername().equals(signIn.getEmail())).collect(Collectors.toList());

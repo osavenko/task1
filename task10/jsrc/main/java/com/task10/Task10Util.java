@@ -57,8 +57,8 @@ public class Task10Util {
         public static final String SLOT_TIME_END = "slotTimeEnd";
     }
     public static class Path{
-        public static final String SING_UP = "/singup";
-        public static final String SING_IN = "/singin";
+        public static final String SING_UP = "/signup";
+        public static final String SING_IN = "/signip";
         public static final String TABLES = "/tables";
         public static final String RESERVATIONS = "/reservations";
     }

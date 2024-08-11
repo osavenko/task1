@@ -36,18 +36,18 @@ public class SingInHandler {
             logger.log(">>>>>>>>>>>>>>>SingIp body: " + request.getBody());
             logger.log(">>>>>>>>>>>>>>>SingIp object: " + signIn);
 
-            logger.log(">>>>>>>>>>>> Create AWSCognitoIdentityProvider");
+//            logger.log(">>>>>>>>>>>> Create AWSCognitoIdentityProvider");
             AWSCognitoIdentityProvider cognitoClient = AWSCognitoIdentityProviderClientBuilder.defaultClient();
 
-            logger.log(">>>>>>>>>>>> AWSCognitoIdentityProvider was created");
-            logger.log(">>>>>>>>>>>> getUserPoolId(): "+getUserPoolId());
+//            logger.log(">>>>>>>>>>>> AWSCognitoIdentityProvider was created");
+//            logger.log(">>>>>>>>>>>> getUserPoolId(): "+getUserPoolId());
      //       List<UserType> userTypeList = getUserTypeList(cognitoClient, signIn,context);
             ListUsersRequest listUsersRequest = new ListUsersRequest()
                     .withUserPoolId(getUserPoolId())
                     .withLimit(60);
-            logger.log(">>>>>>>>>>>> listUsersRequest: "+listUsersRequest);
+//            logger.log(">>>>>>>>>>>> listUsersRequest: "+listUsersRequest);
             ListUsersResult result = cognitoClient.listUsers(listUsersRequest);
-            logger.log(">>>>>>>>>>>> listUsers was called: "+result.getUsers());
+//            logger.log(">>>>>>>>>>>> listUsers was called: "+result.getUsers());
             result.getUsers().stream()
                     .forEach(userType->{
                         logger.log(">>>>>>>>>>>========"+userType.getUsername());
@@ -57,7 +57,7 @@ public class SingInHandler {
                     .filter(userType ->
                             userType.getUsername().equals(signIn.getEmail())).collect(Collectors.toList());
 
-            logger.log(">>>>>>>>>>>> getUserTypeList:  " + userTypeList.isEmpty());
+            logger.log(">>>>>>>>>>>> userTypeList.isEmpty():  " + userTypeList.isEmpty());
             if (userTypeList.isEmpty()) {
                 response.setStatusCode(StatusCode.BAD_REQUEST);
                 return response;

@@ -40,7 +40,18 @@ public class SingInHandler {
             AWSCognitoIdentityProvider cognitoClient = AWSCognitoIdentityProviderClientBuilder.defaultClient();
 
             logger.log(">>>>>>>>>>>> AWSCognitoIdentityProvider was created");
-            List<UserType> userTypeList = getUserTypeList(cognitoClient, signIn);
+            logger.log(">>>>>>>>>>>> getUserPoolId(): "+getUserPoolId());
+     //       List<UserType> userTypeList = getUserTypeList(cognitoClient, signIn,context);
+            ListUsersRequest listUsersRequest = new ListUsersRequest()
+                    .withUserPoolId(getUserPoolId())
+                    .withLimit(60);
+            logger.log(">>>>>>>>>>>> listUsersRequest: "+listUsersRequest);
+            ListUsersResult result = cognitoClient.listUsers(listUsersRequest);
+            logger.log(">>>>>>>>>>>> listUsers was called: "+result.getUsers());
+            List<UserType> userTypeList = result.getUsers().stream()
+                    .filter(userType ->
+                            userType.getUsername().equals(signIn.getEmail())).collect(Collectors.toList());
+
             logger.log(">>>>>>>>>>>> getUserTypeList:  " + userTypeList.isEmpty());
             if (userTypeList.isEmpty()) {
                 response.setStatusCode(StatusCode.BAD_REQUEST);
@@ -90,7 +101,7 @@ public class SingInHandler {
                 .getAccessToken();
     }
 
-    private List<UserType> getUserTypeList(AWSCognitoIdentityProvider cognitoClient, SignIn signIn) {
+    private static List<UserType> getUserTypeList(AWSCognitoIdentityProvider cognitoClient, SignIn signIn,Context context) {
         ListUsersRequest listUsersRequest = new ListUsersRequest()
                 .withUserPoolId(getUserPoolId())
                 .withLimit(60);

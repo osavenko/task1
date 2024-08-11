@@ -5,7 +5,8 @@ import com.amazonaws.services.cognitoidp.AWSCognitoIdentityProviderClientBuilder
 import com.amazonaws.services.cognitoidp.model.*;
 
 public class Task10Util {
-    private static final String USER_POOL_NAME ="cmtr-2c83ab08-simple-booking-userpool";
+    private static final String USER_POOL_NAME ="cmtr-2c83ab08-simple-booking-userpool-test";
+    //private static final String USER_POOL_NAME ="cmtr-2c83ab08-simple-booking-userpool";
     public static class StatusCode{
         public static final int SUCCESS = 200;
         public static final int BAD_REQUEST = 400;

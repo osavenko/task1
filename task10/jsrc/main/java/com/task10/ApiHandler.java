@@ -25,17 +25,6 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
         String path = request.getPath();
         final LambdaLogger logger = context.getLogger();
 
-/*
-        logger.log("=========Current request :" + request);
-        logger.log("=========Current path: " + path);
-        logger.log("=========Current method: " + request.getHttpMethod());
-        logger.log("=========Current body: " + request.getBody());
-        logger.log("========= SIGN IN" + path.equals(Path.SING_IN));
-        logger.log("========= SIGN UP" + path.equals(Path.SING_UP));
-        logger.log("========= RESERVATION" + path.equals(Path.RESERVATIONS));
-        logger.log("========= TABLES" + path.equals(Path.TABLES));
-*/
-
         switch (path) {
             case Path.SIGN_IN: {
                 return new SingInHandler().handleRequest(request, context);
@@ -54,8 +43,7 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
             default:
                 logger.log("00000000000000000000 0  00000000000 0000000 Неочикувана фігня");
         }
-        logger.log("======Unknown path");
-        responseEvent.setStatusCode(StatusCode.BAD_REQUEST);
-        return responseEvent;
+        logger.log("======TABLE PATH WITH ID path:   "+path);
+        return new TableHandler().handleRequest(request, context);
     }
 }

@@ -15,10 +15,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.task10.DynamoDBUtils;
 import com.task10.model.Reservation;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import static com.task10.Task10Util.*;
@@ -76,9 +73,9 @@ public class ReservationHandler {
                         response.setStatusCode(StatusCode.BAD_REQUEST);
                         return response;
                     }
-
+                    String id = UUID.randomUUID().toString();
                     Item item = new Item()
-                            .withPrimaryKey(ReservationField.ID, reservation.getId())
+                            .withPrimaryKey(ReservationField.ID, id)
                             .withInt(ReservationField.TABLE_NUMBER, reservation.getTableNumber())
                             .withString(ReservationField.CLIENT_NAME, reservation.getClientName())
                             .withString(ReservationField.PHONE_NUMBER, reservation.getPhoneNumber())
@@ -87,7 +84,7 @@ public class ReservationHandler {
                             .withString(ReservationField.SLOT_TIME_END, reservation.getSlotTimeEnd());
                     reservationTables.putItem(item);
 
-                    response.setBody("{\"reservationId\": \"" + reservation.getId() + "\"}");
+                    response.setBody("{\"reservationId\": \"" + id + "\"}");
                 }
             }
         } catch (Exception e) {

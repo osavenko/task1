@@ -46,9 +46,23 @@ public class SingInHandler {
                 response.setStatusCode(StatusCode.BAD_REQUEST);
                 return response;
             }
+            logger.log(">>>>>>>>>>>> getAccessToken:  " );
+            logger.log(">>>>>>>>>>>> getAccessToken(PoolId):  " + getUserPoolId().toString() );
+            logger.log(">>>>>>>>>>>> getAccessToken(UserClient):  " +getUserClientId());
+            AdminInitiateAuthRequest authRequest = new AdminInitiateAuthRequest()
+                    .withAuthFlow(AuthFlowType.ADMIN_NO_SRP_AUTH)
+                    .withUserPoolId(getUserPoolId())
+                    .withClientId(getUserClientId())
+                    .addAuthParametersEntry(SingInAttributesName.USER_NAME, signIn.getEmail())
+                    .addAuthParametersEntry(SingInAttributesName.PASSWORD, signIn.getPassword());
+            logger.log(">>>>>>>>>>>> authRequest:  " +authRequest.toString());
 
-            final String accessToken = getAccessToken(signIn, cognitoClient);
+            final String accessToken = cognitoClient.adminInitiateAuth(authRequest)
+                    .getAuthenticationResult()
+                    .getAccessToken();
 
+            //final String accessToken = getAccessToken(signIn, cognitoClient);
+            logger.log(">>>>>>>>>>>> AccessToken:  "+accessToken );
             response.setStatusCode(StatusCode.SUCCESS);
             response.setBody("{\"accessToken\": \"" + accessToken + "\"}");
             logger.log(">>>>>>>>>>>> ++++++++++++++++++++++++++++++++++++" );
@@ -63,6 +77,7 @@ public class SingInHandler {
     }
 
     private String getAccessToken(SignIn signIn, AWSCognitoIdentityProvider cognitoClient) {
+
         AdminInitiateAuthRequest authRequest = new AdminInitiateAuthRequest()
                 .withAuthFlow(AuthFlowType.ADMIN_NO_SRP_AUTH)
                 .withUserPoolId(getUserPoolId())

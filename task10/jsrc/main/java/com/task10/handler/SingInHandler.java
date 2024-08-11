@@ -20,7 +20,7 @@ public class SingInHandler {
     public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent request, Context context) {
         APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent();
         final LambdaLogger logger = context.getLogger();
-        logger.log(">>>>>>>>>>>>>>SingIp body: " + request.getBody());
+//        logger.log(">>>>>>>>>>>>>>SingIp body: " + request.getBody());
 
 
         if (!request.getHttpMethod().equals(HttpMethod.POST)) {
@@ -33,8 +33,10 @@ public class SingInHandler {
         try {
             final Map<String, String> singInRequest = new ObjectMapper().readValue(request.getBody(), Map.class);
             final SignIn signIn = SignIn.getInstance(singInRequest);
+/*
             logger.log(">>>>>>>>>>>>>>>SingIp body: " + request.getBody());
             logger.log(">>>>>>>>>>>>>>>SingIp object: " + signIn);
+*/
 
 //            logger.log(">>>>>>>>>>>> Create AWSCognitoIdentityProvider");
             AWSCognitoIdentityProvider cognitoClient = AWSCognitoIdentityProviderClientBuilder.defaultClient();
@@ -48,40 +50,44 @@ public class SingInHandler {
 //            logger.log(">>>>>>>>>>>> listUsersRequest: "+listUsersRequest);
             ListUsersResult result = cognitoClient.listUsers(listUsersRequest);
 //            logger.log(">>>>>>>>>>>> listUsers was called: "+result.getUsers());
+            List<UserType> userTypeList = result.getUsers().stream()
+                    .filter(userType ->
+                            userType.getUsername().equals(signIn.getEmail())).collect(Collectors.toList());
+/*
             result.getUsers().stream()
                     .forEach(userType->{
                         logger.log(">>>>>>>>>>>========"+userType.getUsername());
                         logger.log(">>>>>>>>>>>========"+userType.getAttributes());
                     });
-            List<UserType> userTypeList = result.getUsers().stream()
-                    .filter(userType ->
-                            userType.getUsername().equals(signIn.getEmail())).collect(Collectors.toList());
+*/
 
-            logger.log(">>>>>>>>>>>> userTypeList.isEmpty():  " + userTypeList.isEmpty());
+//            logger.log(">>>>>>>>>>>> userTypeList.isEmpty():  " + userTypeList.isEmpty());
             if (userTypeList.isEmpty()) {
                 response.setStatusCode(StatusCode.BAD_REQUEST);
                 return response;
             }
+/*
             logger.log(">>>>>>>>>>>> getAccessToken:  " );
             logger.log(">>>>>>>>>>>> getAccessToken(PoolId):  " + getUserPoolId().toString() );
             logger.log(">>>>>>>>>>>> getAccessToken(UserClient):  " +getUserClientId());
+*/
             AdminInitiateAuthRequest authRequest = new AdminInitiateAuthRequest()
                     .withAuthFlow(AuthFlowType.ADMIN_NO_SRP_AUTH)
                     .withUserPoolId(getUserPoolId())
                     .withClientId(getUserClientId())
                     .addAuthParametersEntry(SingInAttributesName.USER_NAME, signIn.getEmail())
                     .addAuthParametersEntry(SingInAttributesName.PASSWORD, signIn.getPassword());
-            logger.log(">>>>>>>>>>>> authRequest:  " +authRequest.toString());
+//            logger.log(">>>>>>>>>>>> authRequest:  " +authRequest.toString());
 
             final String accessToken = cognitoClient.adminInitiateAuth(authRequest)
                     .getAuthenticationResult()
                     .getAccessToken();
 
             //final String accessToken = getAccessToken(signIn, cognitoClient);
-            logger.log(">>>>>>>>>>>> AccessToken:  "+accessToken );
+//            logger.log(">>>>>>>>>>>> AccessToken:  "+accessToken );
             response.setStatusCode(StatusCode.SUCCESS);
             response.setBody("{\"accessToken\": \"" + accessToken + "\"}");
-            logger.log(">>>>>>>>>>>> ++++++++++++++++++++++++++++++++++++" );
+//            logger.log(">>>>>>>>>>>> ++++++++++++++++++++++++++++++++++++" );
             return response;
         } catch (Exception e) {
             logger.log("Exception: " + e.getMessage());
@@ -89,31 +95,5 @@ public class SingInHandler {
             response.setStatusCode(StatusCode.BAD_REQUEST);
             return response;
         }
-
-    }
-
-    private String getAccessToken(SignIn signIn, AWSCognitoIdentityProvider cognitoClient) {
-
-        AdminInitiateAuthRequest authRequest = new AdminInitiateAuthRequest()
-                .withAuthFlow(AuthFlowType.ADMIN_NO_SRP_AUTH)
-                .withUserPoolId(getUserPoolId())
-                .withClientId(getUserClientId())
-                .addAuthParametersEntry(SingInAttributesName.USER_NAME, signIn.getEmail())
-                .addAuthParametersEntry(SingInAttributesName.PASSWORD, signIn.getPassword());
-
-        return cognitoClient.adminInitiateAuth(authRequest)
-                .getAuthenticationResult()
-                .getAccessToken();
-    }
-
-    private static List<UserType> getUserTypeList(AWSCognitoIdentityProvider cognitoClient, SignIn signIn,Context context) {
-        ListUsersRequest listUsersRequest = new ListUsersRequest()
-                .withUserPoolId(getUserPoolId())
-                .withLimit(60);
-        ListUsersResult listUsersResult = cognitoClient.listUsers(listUsersRequest);
-
-        return listUsersResult.getUsers().stream()
-                .filter(u -> u.getUsername().equals(signIn.getEmail()))
-                .collect(Collectors.toList());
     }
 }

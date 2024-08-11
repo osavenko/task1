@@ -35,11 +35,14 @@ public class TableHandler {
             switch (request.getHttpMethod()) {
                 case HttpMethod.GET: {
                     String[] splitPath = request.getPath().split("/");
+                    logger.log("++++++++++++++++++>>>"+request.getPath());
                     if (splitPath.length > 2) {
+                        logger.log("++++++++++++++++++>>> splitPath.length > 2");
                         Item item = tables.getItem(TableField.ID, Integer.parseInt(splitPath[splitPath.length - 1]));
                         Map<String, Object> body = convertItemToMap(item);
                         response.setBody(new ObjectMapper().writeValueAsString(body));
                     } else {
+                        logger.log("++++++++++++++++++>>> splitPath.length < 2"+request.getPath());
                         List<Map<String, AttributeValue>> items = DynamoDBUtils.getAllItemsFromTable(dynamoDBClient, DYNAMODB_TABLE);
                         Map<String, List<Map<String, Object>>> body = convertItemToMap(items);
                         response.setBody(new ObjectMapper().writeValueAsString(body));

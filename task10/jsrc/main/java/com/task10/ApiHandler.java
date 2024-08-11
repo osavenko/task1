@@ -38,7 +38,6 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
 
         switch (path) {
             case Path.SIGN_IN: {
-                logger.log("========>>>>>>>>>>>>>SignIn operation ");
                 return new SingInHandler().handleRequest(request, context);
             }
             case Path.SING_UP: {

@@ -26,26 +26,31 @@ public class ApiHandler implements RequestHandler<APIGatewayProxyRequestEvent, A
 
         switch (path) {
             case Task11Util.Path.SIGN_IN: {
+                logger.log("SIGN_IN");
                 responseEvent = new SingInHandler().handleRequest(request, context);
                 responseEvent.setHeaders(Task11Util.getHeaders());
                 return responseEvent;
             }
             case Task11Util.Path.SING_UP: {
+                logger.log("SIGN_UP");
                 responseEvent = new SingUpHandler().handleRequest(request, context);
                 responseEvent.setHeaders(Task11Util.getHeaders());
                 return responseEvent;
             }
             case Task11Util.Path.TABLES: {
+                logger.log("TABLES");
                 responseEvent = new TableHandler().handleRequest(request, context);
                 responseEvent.setHeaders(Task11Util.getHeaders());
                 return responseEvent;
             }
             case Task11Util.Path.RESERVATIONS: {
+                logger.log("RESERVATION");
                 responseEvent = ReservationHandler.handleRequest(request,context);
                 responseEvent.setHeaders(Task11Util.getHeaders());
                 return responseEvent;
             }
         }
+        logger.log("TABLES{ID}");
         responseEvent = new TableHandler().handleRequest(request, context);
         responseEvent.setHeaders(Task11Util.getHeaders());
         return responseEvent;

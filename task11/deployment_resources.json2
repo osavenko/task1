@@ -12,18 +12,31 @@
             "dynamodb:PutItem",
             "dynamodb:Batch*",
             "dynamodb:DeleteItem",
-            "dynamodb:Scan",
-            "cognito-idp:DescribeUserPool",
-            "cognito-idp:GetUser",
-            "cognito-idp:ListUsers",
-            "cognito-idp:AdminCreateUser",
-            "cognito-idp:AdminInitiateAuth",
-            "cognito-idp:GetIdentityProviderByIdentifier",
+            "ssm:PutParameter",
+            "ssm:GetParameter",
+            "kms:Decrypt"
+          ],
+          "Effect": "Allow",
+          "Resource": "*"
+        }
+      ],
+      "Version": "2012-10-17"
+    },
+    "resource_type": "iam_policy"
+  },
+  "lambda-cognito-execution": {
+    "policy_content": {
+      "Statement": [
+        {
+          "Action": [
             "cognito-idp:ListUserPools",
             "cognito-idp:ListUserPoolClients",
-            "cognito-idp:AdminRespondToAuthChallenge",
+            "cognito-idp:AdminCreateUser",
             "cognito-idp:AdminConfirmSignUp",
-            "cognito-idp:AdminUpdateUserAttributes"
+            "cognito-idp:CreateUserPoolClient",
+            "cognito-idp:AdminInitiateAuth",
+            "cognito-idp:AdminRespondToAuthChallenge",
+            "dynamodb:Scan"
           ],
           "Effect": "Allow",
           "Resource": "*"
@@ -37,32 +50,30 @@
     "predefined_policies": [],
     "principal_service": "lambda",
     "custom_policies": [
-      "lambda-basic-execution"
+      "lambda-basic-execution",
+      "lambda-cognito-execution"
     ],
     "resource_type": "iam_role"
   },
   "simple-booking-userpool": {
     "resource_type": "cognito_idp",
     "password_policy": {
-      "minimum_length": 12,
+      "minimum_length": 8,
       "require_uppercase": true,
       "require_symbols": true,
       "require_lowercase": true,
       "require_numbers": true
     },
-    "auto_verified_attributes": [],
+    "auto_verified_attributes": [
+      "email"
+    ],
     "sms_configuration": {},
-    "username_attributes": [],
+    "username_attributes": [
+      "email"
+    ],
     "custom_attributes": [],
     "client": {
-      "client_name": "client-app",
-      "generate_secret": false,
-      "explicit_auth_flows": [
-        "ALLOW_ADMIN_USER_PASSWORD_AUTH",
-        "ALLOW_CUSTOM_AUTH",
-        "ALLOW_USER_SRP_AUTH",
-        "ALLOW_REFRESH_TOKEN_AUTH"
-      ]
+      "client_name": "api_client_syndicate"
     }
   },
   "Tables": {
